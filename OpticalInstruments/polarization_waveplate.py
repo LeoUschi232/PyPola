@@ -1,6 +1,6 @@
-from OpticalInstruments.abstract_optical_instrument import AbstractOpticalInstrument
+from PyPola.OpticalInstruments.abstract_optical_instrument import AbstractOpticalInstrument
 from enum import Enum
-from numpy import pi, cos, sin
+from numpy import pi, cos, sin, abs, array
 
 
 class WaveplateType(Enum):
@@ -69,3 +69,4 @@ class PolarizationWaveplate(AbstractOpticalInstrument):
 
         self.phase_shift = new_phase_shift
         self.setup_stokes_matrix()
+

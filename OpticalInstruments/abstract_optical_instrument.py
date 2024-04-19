@@ -22,4 +22,4 @@ class AbstractOpticalInstrument:
     def pass_stokes_vector(self, input_stokes_vector):
         input_stokes_vector = array(input_stokes_vector)
         output_stokes_vector = self.stokes_matrix @ input_stokes_vector
-        return array([[0.0 if abs(float(item[0])) < 1e-12 else float(item[0])] for item in output_stokes_vector])
+        return array([[0.0 if abs(item[0]) < 1e-12 else float(item[0])] for item in output_stokes_vector])
