@@ -1,5 +1,5 @@
-from PyPola.OpticalInstruments.polarization_waveplate import PolarizationWaveplate, WaveplateType
-from PyPola.Utilities.polarization_utilities import degree_of_polarization
+from OpticalInstruments.polarization_waveplate import PolarizationWaveplate, WaveplateType
+from Utilities.polarization_utilities import degree_of_polarization
 from numpy import pi, array_equal, array
 import unittest
 

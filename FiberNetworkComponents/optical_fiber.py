@@ -1,6 +1,6 @@
-from PyPola.OpticalInstruments.linear_polarizer import LinearPolarizer
-from PyPola.OpticalInstruments.polarization_waveplate import PolarizationWaveplate
-from PyPola.OpticalInstruments.abstract_optical_instrument import AbstractOpticalInstrument
+from OpticalInstruments.linear_polarizer import LinearPolarizer
+from OpticalInstruments.polarization_waveplate import PolarizationWaveplate
+from OpticalInstruments.abstract_optical_instrument import AbstractOpticalInstrument
 from numpy import array, pi, sin, cos, tan, arctan, sinh, cosh
 from random import uniform
 from time import sleep

@@ -1,8 +1,8 @@
-from PyPola.Utilities.polarization_utilities import (
-    random_polarized_stokes_vector, degree_of_polarization, get_angle_to_x_axis
+from Utilities.polarization_utilities import (
+    degree_of_polarization, get_angle_to_x_axis
 )
-from PyPola.FiberNetworkComponents.optical_fiber import OpticalFiber, segment_variation
-from numpy import pi, cos, sin, linspace, array, zeros, min, max, abs
+from FiberNetworkComponents.optical_fiber import OpticalFiber
+from numpy import pi, array, zeros, min, max, abs
 from tqdm import tqdm as taquadum
 from matplotlib import pyplot as plt
 from time import sleep
@@ -104,7 +104,7 @@ def align_angles(angle_array):
 
 measured_arrays = get_results_from_measurement(
     nr_of_fiber_segments=10000,
-    nr_of_timepoints=1000000,
+    nr_of_timepoints=10000,
     input_stokes_vector=[[1], [1], [0], [0]]
 )
 plot_measurements(measured_arrays)

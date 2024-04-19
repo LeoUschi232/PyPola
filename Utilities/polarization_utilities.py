@@ -1,6 +1,5 @@
 from numpy import sqrt, arctan, sign, pi
 from random import uniform
-from matplotlib import pyplot as plt
 
 
 def degree_of_polarization(stokes_vector):
