@@ -9,7 +9,6 @@ import unittest
 
 
 class TestStokesMeasurement(unittest.TestCase):
-
     def test_polarization_analysis_quarterwaveplate_4_rotators(self):
         input_stokes_vector = random_polarized_stokes_vector()
         actual_s0, actual_s1, actual_s2, actual_s3 = concatenate(input_stokes_vector)
