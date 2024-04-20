@@ -1,7 +1,7 @@
 from Utilities.polarization_utilities import (
     random_polarized_stokes_vector, degree_of_polarization, get_angle_to_x_axis
 )
-from numpy import pi, cos, sin, linspace, concatenate
+from numpy import pi
 import unittest
 
 

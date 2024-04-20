@@ -1,5 +1,5 @@
 from OpticalInstruments.abstract_optical_instrument import AbstractOpticalInstrument
-from numpy import pi, cos, sin, abs, array
+from numpy import cos, sin, array
 
 
 class LinearPolarizer(AbstractOpticalInstrument):

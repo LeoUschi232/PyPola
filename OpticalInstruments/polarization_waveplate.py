@@ -1,6 +1,6 @@
 from OpticalInstruments.abstract_optical_instrument import AbstractOpticalInstrument
 from enum import Enum
-from numpy import pi, cos, sin, abs, array
+from numpy import pi, cos, sin
 
 
 class WaveplateType(Enum):

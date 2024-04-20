@@ -2,7 +2,7 @@ from OpticalInstruments.linear_polarizer import LinearPolarizer
 from OpticalInstruments.polarization_waveplate import PolarizationWaveplate, WaveplateType
 from OpticalInstruments.magneto_optic_rotator import MagnetoOpticRotator
 from Utilities.polarization_utilities import (
-    random_polarized_stokes_vector, degree_of_polarization
+    random_polarized_stokes_vector
 )
 from numpy import pi, cos, sin, linspace, concatenate
 import unittest

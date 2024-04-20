@@ -1,7 +1,5 @@
-from OpticalInstruments.linear_polarizer import LinearPolarizer
-from OpticalInstruments.polarization_waveplate import PolarizationWaveplate
 from OpticalInstruments.abstract_optical_instrument import AbstractOpticalInstrument
-from numpy import array, pi, sin, cos, tan, arctan, sinh, cosh
+from numpy import pi, sin, cos
 from random import uniform
 from time import sleep
 from tqdm import tqdm as taquadum
