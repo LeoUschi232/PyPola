@@ -17,7 +17,7 @@ def output_intensity_v1(s0, s1, s2, s3, alpha, beta):
 
 
 def output_intensity_v2(sv, alpha, beta):
-    return output_intensity_v1(*(array(sv).flatten()), alpha, beta)
+    return output_intensity_v1(*sv.as_array(), alpha, beta)
 
 
 def manifest_actual_vs_computed_table(actual_data, computed_data):
@@ -77,12 +77,12 @@ def measure_with_thorlabs_polarimeter(input_stokes_vector, n=180000, max_beta=pi
     calculated_s3 = -2 * a1
 
     manifest_actual_vs_computed_table(
-        actual_data=[input_stokes_vector[i][0] for i in range(4)],
+        actual_data=input_stokes_vector.as_array(),
         computed_data=[calculated_s0, calculated_s1, calculated_s2, calculated_s3]
     )
     return [[calculated_s0], [calculated_s1], [calculated_s2], [calculated_s3]]
 
 
 stokes_vector = random_polarized_stokes_vector()
-print(f"Input:\n{stokes_vector}")
+print("Input:", stokes_vector.as_list())
 measure_with_thorlabs_polarimeter(stokes_vector)

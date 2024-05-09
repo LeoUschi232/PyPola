@@ -1,5 +1,5 @@
-from PyPola.Utilities.polarization_utilities import degree_of_polarization, get_angle_to_x_axis
-from PyPola.FiberNetworkComponents.optical_fiber import OpticalFiber, pmd_variation
+from PyPola.FiberNetworkComponents.optical_fiber import OpticalFiber
+from PyPola.Utilities.stokes_vector import StokesVector
 from numpy import pi, array, zeros, min, max, abs, dot
 from tqdm import tqdm as taquadum
 from matplotlib import pyplot as plt
@@ -22,11 +22,11 @@ def get_results_from_measurement(nr_of_fiber_segments, nr_of_timepoints, input_s
         optical_fiber.fluctuate_pmd()
         output_stokes_vector = optical_fiber.pass_stokes_vector(input_stokes_vector)
 
-        s1_array.append(output_stokes_vector[1][0])
-        s2_array.append(output_stokes_vector[2][0])
-        s3_array.append(output_stokes_vector[3][0])
-        dop_array.append(degree_of_polarization(output_stokes_vector))
-        angle_array.append(get_angle_to_x_axis(output_stokes_vector))
+        s1_array.append(output_stokes_vector.s1)
+        s2_array.append(output_stokes_vector.s2)
+        s3_array.append(output_stokes_vector.s3)
+        dop_array.append(output_stokes_vector.degree_of_polarization)
+        angle_array.append(0.5 * output_stokes_vector.double_orientation_angle)
 
         progress_bar.set_postfix({"Measurement": f"{i}/{nr_of_timepoints}"})
         progress_bar.update()
@@ -46,7 +46,6 @@ def plot_measurements(measurements):
     aligned_angle_array = align_angles(measurements[5])
 
     plt.subplot(2, 1, 1)
-    plt.title(f"PMD Variation: {pmd_variation}")
     plt.plot(timepoints, s1_array, color="blue", label="S1")
     plt.plot(timepoints, s2_array, color="red", label="S2")
     plt.plot(timepoints, s3_array, color="green", label="S3")
@@ -123,10 +122,9 @@ def get_qber_between_steps(measurements, qber_threshold: float = 0.03):
 measured_arrays = get_results_from_measurement(
     nr_of_fiber_segments=10000,
     nr_of_timepoints=10000,
-    input_stokes_vector=[[1], [1], [0], [0]]
+    input_stokes_vector=StokesVector(s0=1, s1=1, s2=0, s3=0)
 )
-# Uncomment when bug gets fixed
-# plot_measurements(measured_arrays)
+plot_measurements(measured_arrays)
 qbers, compensation_timestamps = get_qber_between_steps(
     measurements=measured_arrays,
     qber_threshold=0.05
