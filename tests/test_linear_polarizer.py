@@ -1,5 +1,5 @@
-from OpticalInstruments.linear_polarizer import LinearPolarizer
-from Utilities.polarization_utilities import degree_of_polarization
+from PyPola.OpticalInstruments.linear_polarizer import LinearPolarizer
+from PyPola.Utilities.polarization_utilities import degree_of_polarization
 from numpy import pi, array_equal, array, sqrt
 from random import uniform
 import unittest

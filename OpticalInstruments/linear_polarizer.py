@@ -1,4 +1,4 @@
-from OpticalInstruments.abstract_optical_instrument import AbstractOpticalInstrument
+from PyPola.OpticalInstruments.abstract_optical_instrument import AbstractOpticalInstrument
 from numpy import cos, sin, array
 
 

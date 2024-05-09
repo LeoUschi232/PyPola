@@ -1,8 +1,6 @@
-from Utilities.polarization_utilities import (
-    degree_of_polarization, get_angle_to_x_axis
-)
-from FiberNetworkComponents.optical_fiber import OpticalFiber
-from numpy import pi, array, zeros, min, max, abs
+from PyPola.Utilities.polarization_utilities import degree_of_polarization, get_angle_to_x_axis
+from PyPola.FiberNetworkComponents.optical_fiber import OpticalFiber, pmd_variation
+from numpy import pi, array, zeros, min, max, abs, dot
 from tqdm import tqdm as taquadum
 from matplotlib import pyplot as plt
 from time import sleep
@@ -30,10 +28,8 @@ def get_results_from_measurement(nr_of_fiber_segments, nr_of_timepoints, input_s
         dop_array.append(degree_of_polarization(output_stokes_vector))
         angle_array.append(get_angle_to_x_axis(output_stokes_vector))
 
-        progress_bar.set_postfix({
-            "Measurement": f"{i}/{nr_of_timepoints}"
-        }, refresh=True)
-        progress_bar.update(1)
+        progress_bar.set_postfix({"Measurement": f"{i}/{nr_of_timepoints}"})
+        progress_bar.update()
     progress_bar.close()
     print("Measurement complete.")
     return timepoints, s1_array, s2_array, s3_array, dop_array, angle_array
@@ -50,6 +46,7 @@ def plot_measurements(measurements):
     aligned_angle_array = align_angles(measurements[5])
 
     plt.subplot(2, 1, 1)
+    plt.title(f"PMD Variation: {pmd_variation}")
     plt.plot(timepoints, s1_array, color="blue", label="S1")
     plt.plot(timepoints, s2_array, color="red", label="S2")
     plt.plot(timepoints, s3_array, color="green", label="S3")
@@ -102,9 +99,37 @@ def align_angles(angle_array):
     return array(angle_array)
 
 
+def get_qber_between_steps(measurements, qber_threshold: float = 0.03):
+    reference_sv = [measurements[1][0], measurements[2][0], measurements[3][0]]
+    print(f"Reconfiguration of polarization controller after t=0")
+
+    qbers = [0]
+    compensation_timestamps = [0]
+    for t in range(1, len(measurements[0])):
+        sv2 = array([measurements[1][t], measurements[2][t], measurements[3][t]])
+        sv1_dotp_sv2 = dot(reference_sv, sv2)
+        qber = 0.5 * (1 - sv1_dotp_sv2)
+        qbers.append(qber)
+        if sv1_dotp_sv2 < 1 - 2 * qber_threshold:
+            reference_sv = sv2
+            compensation_timestamps.append(t)
+            print(f"\nQBER:", round(100 * qber, 2), "%")
+            print(f"Reconfiguration of polarization controller after t={t}")
+            print(f"New reference vector:\n{reference_sv}")
+
+    return qbers, compensation_timestamps
+
+
 measured_arrays = get_results_from_measurement(
     nr_of_fiber_segments=10000,
     nr_of_timepoints=10000,
     input_stokes_vector=[[1], [1], [0], [0]]
 )
-plot_measurements(measured_arrays)
+# Uncomment when bug gets fixed
+# plot_measurements(measured_arrays)
+qbers, compensation_timestamps = get_qber_between_steps(
+    measurements=measured_arrays,
+    qber_threshold=0.05
+)
+avg_timesteps_between_compensations = round(10000 / len(compensation_timestamps))
+print(f"\nAverage timesteps between compensations: {avg_timesteps_between_compensations}")
