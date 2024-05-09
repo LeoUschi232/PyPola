@@ -1,6 +1,6 @@
 from PyPola.OpticalInstruments.abstract_optical_instrument import AbstractOpticalInstrument
 from PyPola.Utilities.stokes_vector import StokesVector
-from PyPola.Utilities.general_utilities import same, float_array_same, get_4x4_unit_matrix
+from PyPola.Utilities.general_utilities import same, float_array_same, get_4x4_unit_matrix, sgn
 from numpy import array, sqrt, dot, sign, cross
 from numpy.linalg import norm
 
@@ -51,7 +51,7 @@ class LiNbO3PolarizationController(AbstractOpticalInstrument):
         # Case 3 out of 3
         # Now it is no longer relevant if possibly some vectors are the same
         # because the additional cases don't require edge-case computation and would only result in useless extra code
-        r_vec = array([z2 - s2, s1 - z1, 0])
+        r_vec = sgn(z2 - s2) * array([z2 - s2, s1 - z1, 0])
         r_vec = r_vec / norm(r_vec)
         cos_2t, sin_2t, _ = r_vec
 
@@ -61,7 +61,7 @@ class LiNbO3PolarizationController(AbstractOpticalInstrument):
         # vectors are pointing in the same direction and negative if they are pointing in opposite directions
         s_extra = s_vec - dot(s_vec, r_vec) * r_vec
         z_extra = z_vec - dot(z_vec, r_vec) * r_vec
-        direction_sign = sign(dot(cross(s_extra, z_extra), r_vec))
+        direction_sign = sign(dot(r_vec, cross(s_extra, z_extra)))
 
         cos_d = dot(s_extra, z_extra) / (norm(s_extra) * norm(z_extra))
         sin_d = direction_sign * sqrt(1 - cos_d * cos_d)

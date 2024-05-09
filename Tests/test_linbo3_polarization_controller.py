@@ -1,7 +1,6 @@
 from PyPola.FiberNetworkComponents.linbo3_polarization_controller import LiNbO3PolarizationController
 from PyPola.Utilities.stokes_vector import StokesVector
 from PyPola.Utilities.polarization_utilities import random_polarized_stokes_vector
-from PyPola.Utilities.general_utilities import float_array_same, same
 import unittest
 
 
