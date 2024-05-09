@@ -1,10 +1,9 @@
 from PyPola.OpticalInstruments.abstract_optical_instrument import AbstractOpticalInstrument
+from PyPola.Utilities.stokes_vector import StokesVector
 from numpy import pi, sin, cos, max, min, array
 from random import uniform
 from time import sleep
 from tqdm import tqdm as taquadum
-
-pmd_variation = pi / 64
 
 
 class OpticalFiber(AbstractOpticalInstrument):
@@ -13,18 +12,19 @@ class OpticalFiber(AbstractOpticalInstrument):
 
         self.nr_of_segments = max([1, nr_of_segments])
         self.loss_factor = 1
+        self.pmd_variation = pi / 64
         self.loss_fluctuates = loss_fluctuates
         if 0 < loss_factor <= 1:
             self.loss_factor = loss_factor
 
         self.current_segment_angle = uniform(0, pi)
-        self.setup_stokes_matrix()
+        self.setup_mueller_matrix()
 
     def fluctuate_loss(self):
         if self.loss_fluctuates:
             self.loss_factor = max([0, min([self.loss_factor + uniform(-0.02, 0.02), 1])])
 
-    def setup_stokes_matrix(self):
+    def setup_mueller_matrix(self):
         print(f"\nSetting up optical fiber...")
         sleep(0.1)
         progress_bar = taquadum(total=self.nr_of_segments)
@@ -35,7 +35,7 @@ class OpticalFiber(AbstractOpticalInstrument):
             })
             progress_bar.update()
         progress_bar.close()
-        self.clean_stokes_matrix()
+        self.clean_mueller_matrix()
         print(f"Finished setting up optical fiber.\n")
 
     @staticmethod
@@ -52,13 +52,14 @@ class OpticalFiber(AbstractOpticalInstrument):
         ])
 
     def fluctuate_pmd(self):
-        current_phase_shift = uniform(-pmd_variation, pmd_variation)
-        self.current_segment_angle += uniform(-pmd_variation, pmd_variation)
+        current_phase_shift = uniform(-self.pmd_variation, self.pmd_variation)
+        self.current_segment_angle += uniform(-self.pmd_variation, self.pmd_variation)
         if self.current_segment_angle > pi:
             self.current_segment_angle -= pi
 
         segment_matrix = self.get_segment_matrix(self.current_segment_angle, current_phase_shift)
-        self.stokes_matrix = segment_matrix @ self.stokes_matrix
+        self.mueller_matrix = segment_matrix @ self.mueller_matrix
 
     def pass_stokes_vector(self, input_stokes_vector):
-        return self.loss_factor * super().pass_stokes_vector(input_stokes_vector)
+        s0, s1, s2, s3 = self.loss_factor * super().pass_stokes_vector(input_stokes_vector).as_array()
+        return StokesVector(s0=s0, s1=s1, s2=s2, s3=s3)

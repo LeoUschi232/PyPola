@@ -1,28 +1,28 @@
 from numpy import array
 from PyPola.Utilities.general_utilities import same
+from PyPola.Utilities.stokes_vector import StokesVector
 
 
 class AbstractOpticalInstrument:
     def __init__(self):
-        self.stokes_matrix = array([
+        self.mueller_matrix = array([
             [1, 0, 0, 0],
             [0, 1, 0, 0],
             [0, 0, 1, 0],
             [0, 0, 0, 1]
         ])
 
-    def setup_stokes_matrix(self):
+    def setup_mueller_matrix(self):
         pass
 
-    def clean_stokes_matrix(self, raw_stokes_matrix=None):
-        if raw_stokes_matrix is None:
-            raw_stokes_matrix = self.stokes_matrix
-        self.stokes_matrix = array([
+    def clean_mueller_matrix(self, raw_mueller_matrix=None):
+        if raw_mueller_matrix is None:
+            raw_mueller_matrix = self.mueller_matrix
+        self.mueller_matrix = array([
             [0.0 if same(value, 0) else float(value) for value in row]
-            for row in raw_stokes_matrix
+            for row in raw_mueller_matrix
         ])
 
-    def pass_stokes_vector(self, input_stokes_vector):
-        input_stokes_vector = array(input_stokes_vector)
-        output_stokes_vector = self.stokes_matrix @ input_stokes_vector
-        return array([[0.0 if same(item[0], 0) else float(item[0])] for item in output_stokes_vector])
+    def pass_stokes_vector(self, input_stokes_vector: StokesVector):
+        s0, s1, s2, s3 = (self.mueller_matrix @ input_stokes_vector.as_vector()).flatten()
+        return StokesVector(s0=s0, s1=s1, s2=s2, s3=s3)
