@@ -3,10 +3,14 @@ from numpy.linalg import norm
 from random import choice
 
 
+def clean(f):
+    return 0.0 if abs(f) < 3e-15 else float(f)
+
+
 def normalize_and_clean(v):
     v = array(v)
     v = v / norm(v)
-    return array([0.0 if same(x, 0) else float(x) for x in v])
+    return array([clean(x) for x in v])
 
 
 def get_4x4_unit_matrix():
