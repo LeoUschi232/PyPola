@@ -1,24 +1,13 @@
-from PyPola.OpticalInstruments.abstract_optical_instrument import AbstractOpticalInstrument
+from PyPola.PolarizationControllers.abstract_polarization_controller import AbstractPolarizationController
 from PyPola.Utilities.stokes_vector import StokesVector
-from PyPola.Utilities.general_utilities import same, float_array_same, get_4x4_unit_matrix, sgn
+from PyPola.Utilities.general_utilities import same, float_array_same, get_4x4_unit_matrix, sgn, normalize_and_clean
 from numpy import array, sqrt, dot, sign, cross
 from numpy.linalg import norm
 
 
-class LiNbO3PolarizationController(AbstractOpticalInstrument):
-    def __init__(
-            self,
-            input_stokes_vector: StokesVector = None,
-            output_stokes_vector: StokesVector = None
-    ):
-        super().__init__()
-        if output_stokes_vector is None:
-            output_stokes_vector = StokesVector(s0=1, s1=1, s2=0, s3=0)
-        if input_stokes_vector is None:
-            input_stokes_vector = StokesVector(s0=1, s1=1, s2=0, s3=0)
-        self.input_stokes_vector = input_stokes_vector
-        self.output_stokes_vector = output_stokes_vector
-        self.setup_mueller_matrix()
+class LiNbO3PolarizationController(AbstractPolarizationController):
+    def __init__(self, input_stokes_vector: StokesVector = None, output_stokes_vector: StokesVector = None):
+        super().__init__(input_stokes_vector, output_stokes_vector)
 
     def setup_mueller_matrix(self):
         expected_z = self.output_stokes_vector.as_array()
@@ -51,8 +40,7 @@ class LiNbO3PolarizationController(AbstractOpticalInstrument):
         # Case 3 out of 3
         # Now it is no longer relevant if possibly some vectors are the same
         # because the additional cases don't require edge-case computation and would only result in useless extra code
-        r_vec = sgn(z2 - s2) * array([z2 - s2, s1 - z1, 0])
-        r_vec = r_vec / norm(r_vec)
+        r_vec = normalize_and_clean(sgn(z2 - s2) * array([z2 - s2, s1 - z1, 0]))
         cos_2t, sin_2t, _ = r_vec
 
         # The term for the cos(delta) will hold up because the dot product of the 2 helping vectors can be negative.
@@ -61,28 +49,18 @@ class LiNbO3PolarizationController(AbstractOpticalInstrument):
         # vectors are pointing in the same direction and negative if they are pointing in opposite directions
         s_extra = s_vec - dot(s_vec, r_vec) * r_vec
         z_extra = z_vec - dot(z_vec, r_vec) * r_vec
-        direction_sign = sign(dot(r_vec, cross(s_extra, z_extra)))
+
+        # The following 2 variables could be collapsed into one expression but are kept
+        # such that their value can be assessed during debugging
+        rotation_vector = normalize_and_clean(cross(s_extra, z_extra))
+        direction_sign = sign(dot(rotation_vector, r_vec))
 
         cos_d = dot(s_extra, z_extra) / (norm(s_extra) * norm(z_extra))
         sin_d = direction_sign * sqrt(1 - cos_d * cos_d)
-        self.mueller_matrix = array([
+        raw_mueller_matrix = [
             [1, 0, 0, 0],
             [0, cos_2t * cos_2t + sin_2t * sin_2t * cos_d, cos_2t * sin_2t * (1 - cos_d), sin_2t * sin_d],
             [0, cos_2t * sin_2t * (1 - cos_d), cos_2t * cos_2t * cos_d + sin_2t * sin_2t, -cos_2t * sin_d],
             [0, -sin_2t * sin_d, cos_2t * sin_d, cos_d]
-        ])
-
-    def reconfigure_polarization_transformation(
-            self,
-            input_stokes_vector: StokesVector = None,
-            output_stokes_vector: StokesVector = None
-    ):
-        if input_stokes_vector is not None:
-            if output_stokes_vector is not None:
-                self.output_stokes_vector = output_stokes_vector
-            self.input_stokes_vector = input_stokes_vector
-        elif output_stokes_vector is not None:
-            self.output_stokes_vector = output_stokes_vector
-        else:
-            return
-        self.setup_mueller_matrix()
+        ]
+        self.clean_mueller_matrix(raw_mueller_matrix)
