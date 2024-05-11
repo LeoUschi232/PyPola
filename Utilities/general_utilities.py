@@ -1,10 +1,10 @@
-from numpy import array, sign
+from numpy import array, sign, pi, sin, cos
 from numpy.linalg import norm
 from random import choice
 
 
 def clean(f):
-    return 0.0 if abs(f) < 3e-15 else float(f)
+    return 0.0 if abs(f) < 1e-12 else round(f, 12)
 
 
 def normalize_and_clean(v):
@@ -43,3 +43,23 @@ def float_array_same(v1, v2):
 
 def sgn(fl: float):
     return sign(fl)
+
+
+def p_sin(fl: float):
+    if same(fl, - 2 * pi) or same(fl, -pi) or same(fl, 0) or same(fl, pi) or same(fl, 2 * pi):
+        return 0.0
+    if same(fl, - 0.5 * pi) or same(fl, 1.5 * pi):
+        return -1.0
+    if same(fl, -1.5 * pi) or same(fl, 0.5 * pi):
+        return 1.0
+    return sin(fl)
+
+
+def p_cos(fl):
+    if same(fl, - 1.5 * pi) or same(fl, -0.5 * pi) or same(fl, 0.5 * pi) or same(fl, 1.5 * pi):
+        return 1.0
+    if same(fl, -2 * pi) or same(fl, 0) or same(fl, 2 * pi):
+        return 0.0
+    if same(fl, - pi) or same(fl, pi):
+        return -1.0
+    return cos(fl)

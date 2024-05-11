@@ -1,4 +1,4 @@
-from PyPola.Utilities.general_utilities import float_array_same
+from PyPola.Utilities.general_utilities import float_array_same, clean
 from numpy import array, sqrt, abs, sign, pi, arctan
 from numpy.linalg import norm
 from enum import Enum
@@ -68,16 +68,20 @@ class StokesVector:
         return float_array_same(self.as_array(), [s0, s1, s2, s3])
 
     def as_list(self):
-        return [[self.s0], [self.s1], [self.s2], [self.s3]]
+        return [[self.clean(si)] for si in [self.s0, self.s1, self.s2, self.s3]]
 
     def as_vector(self):
-        return array(self.as_list())
+        return array([[self.s0], [self.s1], [self.s2], [self.s3]])
 
     def as_array(self):
-        return array([self.s0, self.s1, self.s2, self.s3])
+        return self.as_vector().flatten()
 
     def as_3d_array(self):
-        return array([self.s1, self.s2, self.s3])
+        return self.as_array()[1:]
+
+    @staticmethod
+    def clean(value):
+        return 0.0 if abs(value) < 1e-12 else round(value, 12)
 
     def normalize(self, normalization: NormalizationType = NormalizationType.NONE):
         if normalization == NormalizationType.INTENSITY:
