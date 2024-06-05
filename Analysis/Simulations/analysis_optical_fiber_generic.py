@@ -1,5 +1,5 @@
 from PyPola.FiberNetworkComponents.optical_fiber import OpticalFiber
-from PyPola.Utilities.stokes_vector import StokesVector
+from PyPola.utilities.stokes_vector import StokesVector
 from numpy import pi, array, zeros, min, max, abs, dot
 from tqdm import tqdm as taquadum
 from matplotlib import pyplot as plt
