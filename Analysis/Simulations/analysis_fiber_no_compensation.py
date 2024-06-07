@@ -24,7 +24,7 @@ combined_fiber_properties = [
 
 # Lists to save the QBIT error rates for each fiber property combination
 # combinations = len(fiber_lengths) * len(fiber_theta_fluctuations) * len(fiber_delta_fluctuations)
-nr_of_datapoints = 45
+nr_of_datapoints = 5
 horizontal_qbers = []
 vertical_qbers = []
 diagonal_qbers = []
@@ -73,12 +73,6 @@ for i in range(len(combined_fiber_properties)):
     diagonal_qbers.append(diagonal_qber)
     antidiagonal_qbers.append(antidiagonal_qber)
 
-# Create a list of labels for each combination of fiber properties
-labels = [(
-    f"L:10^{len(str(fiber_length)) - 1}\n"
-    f"θ:{round(fiber_theta_fluctuation, 2)}\n"
-    f"δ:{round(fiber_delta_fluctuation, 2)}"
-) for fiber_length, fiber_theta_fluctuation, fiber_delta_fluctuation in combined_fiber_properties]
 
 bar_width = 0.2
 x = arange(len(combined_fiber_properties))
@@ -94,7 +88,6 @@ bar4 = ax.bar(x + 1.5 * bar_width, antidiagonal_qbers, bar_width, label="Antidia
 
 # Adding labels to the x-axis
 ax.set_xticks(x)
-ax.set_xticklabels(labels, fontsize=8, rotation=90)
 
 # Adding labels and title
 ax.set_xlabel("Fiber Segment counts")
