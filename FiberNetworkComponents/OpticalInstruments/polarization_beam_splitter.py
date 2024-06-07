@@ -25,8 +25,8 @@ class PolarizationBeamSplitter(AbstractOpticalInstrument):
             [0, 0, 0, 0]
         ])
 
-        cos_2t = -sin(self.transmission_double_theta)
-        sin_2t = cos(self.transmission_double_theta)
+        cos_2t = -cos(self.transmission_double_theta)
+        sin_2t = -sin(self.transmission_double_theta)
         self.reflection_mueller_matrix = 0.5 * array([
             [1, cos_2t, sin_2t, 0],
             [cos_2t, cos_2t * cos_2t, cos_2t * sin_2t, 0],

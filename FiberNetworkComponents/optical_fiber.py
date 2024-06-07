@@ -1,9 +1,8 @@
 from PyPola.FiberNetworkComponents.OpticalInstruments.abstract_optical_instrument import AbstractOpticalInstrument
 from PyPola.utilities.stokes_vector import StokesVector
-from PyPola.utilities.general_utilities import half_pi, double_pi, maxabs
-from numpy import pi, sin, cos, max, min, array
+from PyPola.utilities.general_utilities import double_pi, maxabs
+from numpy import sin, cos, max, array
 from random import uniform
-from time import sleep
 from tqdm import tqdm as taquadum
 
 
@@ -33,8 +32,7 @@ class OpticalFiber(AbstractOpticalInstrument):
         self.setup_mueller_matrix()
 
     def setup_mueller_matrix(self):
-        print(f"\nSetting up optical fiber...")
-        sleep(0.1)
+        print(f"Setting up optical fiber...")
         progress_bar = taquadum(total=self.nr_of_segments)
         for i in range(1, self.nr_of_segments + 1):
             self.fluctuate_pmd()
@@ -43,7 +41,7 @@ class OpticalFiber(AbstractOpticalInstrument):
             })
             progress_bar.update()
         progress_bar.close()
-        print(f"Finished setting up optical fiber.\n")
+        print(f" => Finished setting up optical fiber.")
 
     @staticmethod
     def get_segment_matrix(double_theta, delta):
