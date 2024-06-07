@@ -40,4 +40,4 @@ class PolarizationBeamSplitter(AbstractOpticalInstrument):
         return StokesVector(ts0, ts1, ts2, ts3), StokesVector(rs0, rs1, rs2, rs3)
 
     def instrument_name(self):
-        return "Polarization Mueller Matrix"
+        return "Polarization Beam Splitter"
