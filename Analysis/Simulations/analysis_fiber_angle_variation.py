@@ -7,7 +7,11 @@ from time import sleep
 
 
 def get_results_from_measurement(nr_of_fiber_segments, nr_of_timepoints, input_stokes_vector):
-    optical_fiber = OpticalFiber(nr_of_segments=nr_of_fiber_segments)
+    optical_fiber = OpticalFiber(
+        nr_of_segments=nr_of_fiber_segments,
+        temporal_pmd_theta_fluctuation=pi / 32,
+        temporal_pmd_delta_fluctuation=pi / 128
+    )
     s1_array = []
     s2_array = []
     s3_array = []

@@ -19,7 +19,7 @@ class QuarterwavelatePolarimeter(AbstractPolarimeter):
         self.number_of_rotations = max([4, number_of_rotations])
         self.betas = linspace(start=0, stop=pi, num=self.number_of_rotations)
 
-    def measure_stokes_vector(self, input_stokes_vector: StokesVector):
+    def measure_stokes_parameters(self, input_stokes_vector: StokesVector):
         output_intensities = []
         progress = progress_bar(
             nr_of_points=5 * self.number_of_rotations,
@@ -62,11 +62,7 @@ class QuarterwavelatePolarimeter(AbstractPolarimeter):
         input_stokes_vector.use_up()
         calculated_s = [2 * a0 + 2 * a2, 4 * b2, -4 * a2, -2 * a1]
 
-        return self.print_and_return_stokes_vector(
-            computed_stokes_parameters=calculated_s,
-            wavelength=input_stokes_vector.wavelength,
-            dont_print=True
-        )
+        return self.print_and_return_parameters(computed_stokes_parameters=calculated_s, dont_print=True)
 
     def instrument_name(self):
         return "Quarterwaveplate Polarimeter"

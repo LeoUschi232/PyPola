@@ -139,7 +139,7 @@ class FourDetecterPolarimeter(AbstractPolarimeter):
         self.instrument_matrix = array(i_matrix) @ inv(s_matrix)
         self.mueller_matrix = inv(self.instrument_matrix)
 
-    def measure_stokes_vector(self, input_stokes_vector: StokesVector):
+    def measure_stokes_parameters(self, input_stokes_vector: StokesVector):
         if self.mueller_matrix is None:
             print(f"4-Detector Photopolarimeter isn't calibrated!")
             return
@@ -156,11 +156,7 @@ class FourDetecterPolarimeter(AbstractPolarimeter):
 
         i_vector = array([[photodetector.photocurrent] for photodetector in self.photodetectors])
         s_vector = (self.mueller_matrix @ i_vector).flatten()
-        return self.print_and_return_stokes_vector(
-            computed_stokes_parameters=s_vector,
-            wavelength=input_stokes_vector.wavelength,
-            dont_print=True
-        )
+        return self.print_and_return_parameters(computed_stokes_parameters=s_vector, dont_print=True)
 
     def instrument_name(self):
         return "4-Detector Polarimeter"

@@ -16,7 +16,7 @@ class SimplePolarimeter(AbstractPolarimeter):
         self.number_of_rotations = max([4, number_of_rotations])
         self.alphas = linspace(start=-0.5 * pi, stop=0.5 * pi, num=self.number_of_rotations)
 
-    def measure_stokes_vector(self, input_stokes_vector: StokesVector):
+    def measure_stokes_parameters(self, input_stokes_vector: StokesVector):
         dop = input_stokes_vector.degree_of_polarization
         if not same(dop, 1):
             print(f"Simple polarimeter can only measure pure polarization states!")
@@ -51,7 +51,7 @@ class SimplePolarimeter(AbstractPolarimeter):
         s2 = s0 * sin(double_psi) * cos(double_xi)
         abs_s3 = s0 * sin(double_xi)
 
-        return self.print_and_return_stokes_vector(
+        return self.print_and_return_parameters(
             computed_stokes_parameters=[s0, s1, s2, abs_s3],
             wavelength=input_stokes_vector.wavelength,
             dont_print=True
