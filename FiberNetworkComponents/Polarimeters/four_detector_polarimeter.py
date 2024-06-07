@@ -78,7 +78,6 @@ class FourDetecterPolarimeter(AbstractPolarimeter):
         self.photodetectors = [Photodetector(k_list[i], rp_list[i], rs_list[i], delta_list[i]) for i in range(4)]
         self.rotators = [MagnetoOpticRotator(2 * alpha12), MagnetoOpticRotator(2 * alpha23)]
         self.instrument_matrix = None
-        self.inverse_instrument_matrix = None
         self.setup_instrument_matrix()
 
     def setup_instrument_matrix(self):
@@ -92,7 +91,7 @@ class FourDetecterPolarimeter(AbstractPolarimeter):
         a_row3 = k3 * ((m1 - m_pd3) @ m_r2 @ m_pd2 @ m_r1 @ m_pd1)[0]
         a_row4 = k4 * (m_pd3 @ m_r2 @ m_pd2 @ m_r1 @ m_pd1)[0]
         self.instrument_matrix = array([a_row1, a_row2, a_row3, a_row4])
-        self.inverse_instrument_matrix = inv(self.instrument_matrix)
+        self.mueller_matrix = inv(self.instrument_matrix)
 
     def calibrate_default(self):
         self.calibrate(
@@ -138,10 +137,10 @@ class FourDetecterPolarimeter(AbstractPolarimeter):
                 current = self.photodetectors[j].photocurrent
                 i_matrix[j][i] = current
         self.instrument_matrix = array(i_matrix) @ inv(s_matrix)
-        self.inverse_instrument_matrix = inv(self.instrument_matrix)
+        self.mueller_matrix = inv(self.instrument_matrix)
 
-    def measure_stokes_parameters(self, input_stokes_vector: StokesVector):
-        if self.inverse_instrument_matrix is None:
+    def measure_stokes_vector(self, input_stokes_vector: StokesVector):
+        if self.mueller_matrix is None:
             print(f"4-Detector Photopolarimeter isn't calibrated!")
             return
         sv = self.photodetectors[0].pass_stokes_vector(input_stokes_vector)
@@ -156,8 +155,12 @@ class FourDetecterPolarimeter(AbstractPolarimeter):
             return
 
         i_vector = array([[photodetector.photocurrent] for photodetector in self.photodetectors])
-        s_vector = (self.inverse_instrument_matrix @ i_vector).flatten()
-        return self.print_and_return_results(s_vector)
+        s_vector = (self.mueller_matrix @ i_vector).flatten()
+        return self.print_and_return_stokes_vector(
+            computed_stokes_parameters=s_vector,
+            wavelength=input_stokes_vector.wavelength,
+            dont_print=True
+        )
 
     def instrument_name(self):
         return "4-Detector Polarimeter"

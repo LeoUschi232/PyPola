@@ -1,6 +1,5 @@
 from PyPola.utilities.general_utilities import float_array_same, round_p, normalize
 from numpy import array, sqrt, abs, sign, pi, arctan
-from numpy.linalg import norm
 from enum import Enum
 
 
@@ -17,6 +16,7 @@ class StokesVector:
             s1: float,
             s2: float,
             s3: float,
+            wavelength: float = 1550,
             normalization: NormalizationType = NormalizationType.NONE
     ):
         # Stokes parameters
@@ -30,6 +30,7 @@ class StokesVector:
         self.s1 = s1
         self.s2 = s2
         self.s3 = s3
+        self.wavelength = abs(wavelength)
 
         # Normalization
         if normalization != NormalizationType.NONE:

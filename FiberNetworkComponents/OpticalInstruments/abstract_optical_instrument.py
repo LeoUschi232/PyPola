@@ -19,7 +19,7 @@ class AbstractOpticalInstrument:
         return StokesVector(s0, s1, s2, s3)
 
     def print_mueller_matrix(self):
-        print(self.__str__())
+        print(str(array([[round_p(value) for value in mueller_row] for mueller_row in self.mueller_matrix])))
 
     def print_bad_argument_error_message(self, argument_name, default_value):
         print(f"ERROR!")

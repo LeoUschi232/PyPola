@@ -1,8 +1,11 @@
-from numpy import array, sign
+from numpy import array, sign, pi, min, max
 from numpy.linalg import norm
 from random import choice
 from time import sleep
 from tqdm import tqdm
+
+half_pi = 0.5 * pi
+double_pi = 2 * pi
 
 
 def normalize(v):
@@ -52,3 +55,11 @@ def progress_bar(nr_of_points, message=""):
     print(message)
     sleep(0.1)
     return tqdm(total=nr_of_points)
+
+
+def minmax(min_x, x, max_x):
+    return min([max_x, max([min_x, x])])
+
+
+def maxabs(x, max_x):
+    return min([abs(x), max_x])

@@ -45,8 +45,7 @@ class Photodetector(AbstractOpticalInstrument):
         self.photocurrent = 0.0
 
     def setup_mueller_matrix(self):
-        cos_2psi = cos(2 * self.psi)
-        sin_2psi = sin(2 * self.psi)
+        cos_2psi, sin_2psi = [(cos(x), sin(x)) for x in [2 * self.psi]][0]
         cos_d = cos(self.delta)
         sin_d = sin(self.delta)
         self.mueller_matrix = self.r * array([

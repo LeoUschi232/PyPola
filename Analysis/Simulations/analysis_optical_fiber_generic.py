@@ -13,7 +13,7 @@ def get_results_from_measurement(nr_of_fiber_segments, nr_of_timepoints, input_s
     s3_array = []
     dop_array = []
     angle_array = []
-    timepoints = array([i for i in range(1, nr_of_timepoints + 1)])
+    timepoints = array(range(1, nr_of_timepoints + 1))
 
     print(f"Measuring output Stokes vectors")
     sleep(0.1)

@@ -50,7 +50,6 @@ class FiberSqueezerPloarizationController(AbstractPolarizationController):
         s2, s3 = 0, -sgn(s1)
 
         # Rotation into the z-plane
-        sqrt_z2s3 = sqrt(z2 * z2 + z3 * z3)
         if z2 == 0.0:
             cos_d3, sin_d3 = 1, 0
         else:

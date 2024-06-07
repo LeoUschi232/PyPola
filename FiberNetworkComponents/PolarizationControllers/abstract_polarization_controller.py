@@ -1,8 +1,5 @@
 from PyPola.FiberNetworkComponents.OpticalInstruments.abstract_optical_instrument import AbstractOpticalInstrument
 from PyPola.utilities.stokes_vector import StokesVector
-from numpy import pi
-
-half_pi = 0.5 * pi
 
 
 class AbstractPolarizationController(AbstractOpticalInstrument):
