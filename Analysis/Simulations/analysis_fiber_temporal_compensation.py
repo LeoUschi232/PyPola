@@ -9,7 +9,7 @@ from os import path
 nr_of_measurements = 10000
 measurements = arange(nr_of_measurements)
 precomputed_fiber = {
-    "chose_fiber": False,
+    "chose_fiber": True,
     "n": 1000000,
     "t": 5,
     "d": 6,
@@ -35,8 +35,8 @@ if precomputed_fiber["chose_fiber"]:
 else:
     fiber = OpticalFiber(
         nr_of_segments=100000,
-        temporal_pmd_theta_fluctuation=pi / 256,
-        temporal_pmd_delta_fluctuation=pi / 256,
+        temporal_pmd_theta_fluctuation=pi / 128,
+        temporal_pmd_delta_fluctuation=pi / 128,
     )
 
 # The next part are the measurements of the stokes parameter at the fiber output
