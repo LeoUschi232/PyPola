@@ -1,6 +1,14 @@
 from PyPola.utilities.stokes_vector import StokesVector, NormalizationType
-from numpy import sqrt, dot, sin, cos
+from numpy import sqrt, dot, sin, cos, pi
 from random import uniform
+from enum import Enum
+
+
+class LinearPolarization(Enum):
+    HORIZONTAL = 0
+    VERTICAL = 1
+    DIAGONAL = 2
+    ANTIDIAGONAL = 3
 
 
 def random_stokes_vector():
@@ -46,3 +54,18 @@ def normalized_dot_product(stokes_vector_1: StokesVector, stokes_vector_2: Stoke
     stokes_vector_1.normalize(NormalizationType.POINCARE_SPHERE)
     stokes_vector_1.normalize(NormalizationType.POINCARE_SPHERE)
     return dot(stokes_vector_1.as_3d_array(), stokes_vector_2.as_3d_array())
+
+
+double_theta_map = {
+    LinearPolarization.HORIZONTAL: 0,
+    LinearPolarization.VERTICAL: pi,
+    LinearPolarization.DIAGONAL: 0.5 * pi,
+    LinearPolarization.ANTIDIAGONAL: 1.5 * pi
+}
+
+linear_stokes_vector_map = {
+    LinearPolarization.HORIZONTAL: StokesVector(s0=1, s1=1, s2=0, s3=0),
+    LinearPolarization.VERTICAL: StokesVector(s0=1, s1=-1, s2=0, s3=0),
+    LinearPolarization.DIAGONAL: StokesVector(s0=1, s1=0, s2=1, s3=0),
+    LinearPolarization.ANTIDIAGONAL: StokesVector(s0=1, s1=0, s2=-1, s3=0)
+}

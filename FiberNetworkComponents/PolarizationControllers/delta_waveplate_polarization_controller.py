@@ -7,9 +7,14 @@ from numpy import array, sqrt, dot, sign, cross
 from numpy.linalg import norm
 
 
-class LiNbO3PolarizationController(AbstractPolarizationController):
-    def __init__(self, input_stokes_vector: StokesVector = None, output_stokes_vector: StokesVector = None):
-        super().__init__(input_stokes_vector, output_stokes_vector)
+class DeltaWaveplatePolarizationController(AbstractPolarizationController):
+    def __init__(
+            self,
+            input_stokes_vector: StokesVector = None,
+            output_stokes_vector: StokesVector = None,
+            response_time: int = 1
+    ):
+        super().__init__(input_stokes_vector, output_stokes_vector, response_time)
 
     def setup_mueller_matrix(self):
         expected_z = self.output_stokes_vector.as_array()
@@ -21,7 +26,7 @@ class LiNbO3PolarizationController(AbstractPolarizationController):
         # Case 1 out of 3
         # If the vectors are the same, no change is necessary
         if float_array_same(s_vec, z_vec):
-            self.mueller_matrix = get_4x4_unit_matrix()
+            self.setup_adjustment_matrix(new_required_matrix=get_4x4_unit_matrix())
             return
 
         # Case 2 out of 3
@@ -30,12 +35,13 @@ class LiNbO3PolarizationController(AbstractPolarizationController):
             square_normalizer = s1 * s1 + s2 * s2
             a = (s1 * s1 - s2 * s2) / square_normalizer
             b = (2 * s1 * s2) / square_normalizer
-            self.mueller_matrix = array([
+            required_matrix = array([
                 [1, 0, 0, 0],
                 [0, a, b, 0],
                 [0, b, -a, 0],
                 [0, 0, 0, -1]
             ])
+            self.setup_adjustment_matrix(new_required_matrix=required_matrix)
             return
 
         # Case 3 out of 3
@@ -58,12 +64,13 @@ class LiNbO3PolarizationController(AbstractPolarizationController):
 
         cos_d = dot(s_extra, z_extra) / (norm(s_extra) * norm(z_extra))
         sin_d = direction_sign * sqrt(1 - cos_d * cos_d)
-        self.mueller_matrix = array([
+        required_matrix = array([
             [1, 0, 0, 0],
             [0, cos_2t * cos_2t + sin_2t * sin_2t * cos_d, cos_2t * sin_2t * (1 - cos_d), sin_2t * sin_d],
             [0, cos_2t * sin_2t * (1 - cos_d), cos_2t * cos_2t * cos_d + sin_2t * sin_2t, -cos_2t * sin_d],
             [0, -sin_2t * sin_d, cos_2t * sin_d, cos_d]
         ])
+        self.setup_adjustment_matrix(new_required_matrix=required_matrix)
 
     def instrument_name(self):
         return "LiNbO3 Polarization Controller"

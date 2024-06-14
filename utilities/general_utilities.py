@@ -63,3 +63,7 @@ def minmax(min_x, x, max_x):
 
 def maxabs(x, max_x):
     return min([abs(x), max_x])
+
+
+def minabs(x, min_x):
+    return max([abs(x), min_x])

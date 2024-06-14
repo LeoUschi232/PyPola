@@ -1,13 +1,11 @@
 from PyPola.FiberNetworkComponents.PolarizationControllers.abstract_polarization_controller import \
     AbstractPolarizationController
-from PyPola.FiberNetworkComponents.PolarizationControllers.linbo3_polarization_controller import \
-    LiNbO3PolarizationController
-from PyPola.FiberNetworkComponents.PolarizationControllers.simple_polarization_controller import \
-    SimplePolarizationController
+from PyPola.FiberNetworkComponents.PolarizationControllers.delta_waveplate_polarization_controller import \
+    DeltaWaveplatePolarizationController
 from PyPola.FiberNetworkComponents.PolarizationControllers.qwp_hwp_qwp_polarization_controller import \
     QwpHwpQwpPolarizationController
-from PyPola.FiberNetworkComponents.PolarizationControllers.fiber_squeezer_polarization_controller import \
-    FiberSqueezerPloarizationController
+from PyPola.FiberNetworkComponents.PolarizationControllers.variable_retardation_polarization_controller import \
+    VariableRetardationPolarizationController
 from PyPola.utilities.stokes_vector import StokesVector
 from PyPola.utilities.polarization_utilities import random_polarized_stokes_vector
 from numpy import mean
@@ -15,21 +13,17 @@ import unittest
 
 
 class TestPolarizationControllers(unittest.TestCase):
-    def test_linb03_polarization_controller(self):
-        self.test_any_polarization_controller(controller=LiNbO3PolarizationController())
-
-    def test_simple_polarization_controller(self):
-        self.test_any_polarization_controller(controller=SimplePolarizationController())
+    def test_delta_waveplate_polarization_controller(self):
+        self.test_any_polarization_controller(controller=DeltaWaveplatePolarizationController(response_time=0))
 
     def test_qwp_hwp_qwp_polarization_controller(self):
-        self.test_any_polarization_controller(controller=QwpHwpQwpPolarizationController())
+        self.test_any_polarization_controller(controller=QwpHwpQwpPolarizationController(response_time=0))
 
-    def test_fiber_squeezer_polarization_controller(self):
-        self.test_any_polarization_controller(controller=FiberSqueezerPloarizationController())
+    def test_variable_retardation_waveplates_polarization_controller(self):
+        self.test_any_polarization_controller(controller=VariableRetardationPolarizationController(response_time=0))
 
     def test_any_polarization_controller(self, controller: AbstractPolarizationController = None):
         if controller is None:
-            print("No controller was provided")
             return
 
         # First out of 3 stages of testing the controller

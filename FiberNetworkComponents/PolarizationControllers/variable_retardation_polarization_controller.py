@@ -6,9 +6,14 @@ from PyPola.utilities.general_utilities import same, get_4x4_unit_matrix, sgn
 from numpy import array, sqrt
 
 
-class FiberSqueezerPloarizationController(AbstractPolarizationController):
-    def __init__(self, input_stokes_vector: StokesVector = None, output_stokes_vector: StokesVector = None):
-        super().__init__(input_stokes_vector, output_stokes_vector)
+class VariableRetardationPolarizationController(AbstractPolarizationController):
+    def __init__(
+            self,
+            input_stokes_vector: StokesVector = None,
+            output_stokes_vector: StokesVector = None,
+            response_time: int = 1
+    ):
+        super().__init__(input_stokes_vector, output_stokes_vector, response_time)
 
     def setup_mueller_matrix(self):
         s1, s2, s3 = self.input_stokes_vector.as_3d_array()
@@ -16,7 +21,7 @@ class FiberSqueezerPloarizationController(AbstractPolarizationController):
 
         # If the vectors are the same, no change is necessary
         if same(s1, z1) and same(s2, z2) and same(s3, z3):
-            self.mueller_matrix = get_4x4_unit_matrix()
+            self.setup_adjustment_matrix(new_required_matrix=get_4x4_unit_matrix())
             return
 
         # Rotation onto the S1S3-plane
@@ -80,7 +85,8 @@ class FiberSqueezerPloarizationController(AbstractPolarizationController):
         ])
 
         # Complete the full matrix
-        self.mueller_matrix = fiber_squeezer_4 @ fiber_squeezer_3 @ fiber_squeezer_2 @ fiber_squeezer_1
+        required_matrix = fiber_squeezer_4 @ fiber_squeezer_3 @ fiber_squeezer_2 @ fiber_squeezer_1
+        self.setup_adjustment_matrix(new_required_matrix=required_matrix)
 
     def instrument_name(self):
         return "Fiber Squeezer Polarization Controller"

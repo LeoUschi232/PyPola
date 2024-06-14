@@ -7,8 +7,14 @@ from numpy import array, sqrt
 
 
 class QwpHwpQwpPolarizationController(AbstractPolarizationController):
-    def __init__(self, input_stokes_vector: StokesVector = None, output_stokes_vector: StokesVector = None):
-        super().__init__(input_stokes_vector, output_stokes_vector)
+
+    def __init__(
+            self,
+            input_stokes_vector: StokesVector = None,
+            output_stokes_vector: StokesVector = None,
+            response_time: int = 1
+    ):
+        super().__init__(input_stokes_vector, output_stokes_vector, response_time)
 
     def setup_mueller_matrix(self):
         s1, s2, s3 = self.input_stokes_vector.as_3d_array()
@@ -16,7 +22,7 @@ class QwpHwpQwpPolarizationController(AbstractPolarizationController):
 
         # If the vectors are the same, no change is necessary
         if same(s1, z1) and same(s2, z2) and same(s3, z3):
-            self.mueller_matrix = get_4x4_unit_matrix()
+            self.setup_adjustment_matrix(new_required_matrix=get_4x4_unit_matrix())
             return
 
         # The commprehensive derivation of the rotation vectors can be found in the docs
@@ -53,7 +59,8 @@ class QwpHwpQwpPolarizationController(AbstractPolarizationController):
             [0, -sin_2t, cos_2t, 0]
         ])
 
-        self.mueller_matrix = qwp2_stokes_matrix @ hwp_stokes_matrix @ qwp1_stokes_matrix
+        required_matrix = qwp2_stokes_matrix @ hwp_stokes_matrix @ qwp1_stokes_matrix
+        self.setup_adjustment_matrix(new_required_matrix=required_matrix)
 
     def instrument_name(self):
         return "QWP-HWP-QWP Polarization Controller"

@@ -1,15 +1,11 @@
 from PyPola.utilities.stokes_vector import StokesVector, round_p
+from PyPola.utilities.general_utilities import get_4x4_unit_matrix
 from numpy import array
 
 
 class AbstractOpticalInstrument:
     def __init__(self):
-        self.mueller_matrix = array([
-            [1, 0, 0, 0],
-            [0, 1, 0, 0],
-            [0, 0, 1, 0],
-            [0, 0, 0, 1]
-        ])
+        self.mueller_matrix = get_4x4_unit_matrix()
 
     def setup_mueller_matrix(self):
         pass

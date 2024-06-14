@@ -1,6 +1,12 @@
 from PyPola.FiberNetworkComponents.OpticalInstruments.abstract_optical_instrument import AbstractOpticalInstrument
 from PyPola.utilities.stokes_vector import StokesVector
 from numpy import array, cos, sin
+from enum import Enum
+
+
+class PbsPass(Enum):
+    TRANSMISSION = 0
+    REFLECTION = 1
 
 
 class PolarizationBeamSplitter(AbstractOpticalInstrument):
