@@ -1,5 +1,5 @@
 from PyPola.utilities.general_utilities import float_array_same, round_p, normalize
-from numpy import array, sqrt, abs, sign, pi, arctan
+from numpy import array, sqrt, abs, sign, pi, arctan, tan, arcsin
 from enum import Enum
 
 
@@ -63,6 +63,9 @@ class StokesVector:
             self.double_ellipticity_angle = 0.5 * sign(s3) * pi
         else:
             self.double_ellipticity_angle = arctan(s3 / sqrt(s1 * s1 + s2 * s2))
+
+        # Pure ellipticity
+        self.ellipticity = tan(0.5 * arcsin(s3 / sqrt(s1 * s1 + s2 * s2 + s3 * s3)))
 
     def equals(self, other: "StokesVector"):
         return float_array_same(self.as_array(), other.as_array())
