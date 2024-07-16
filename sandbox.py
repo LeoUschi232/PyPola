@@ -1,56 +1,29 @@
-from PyPola.FiberNetworkComponents.Polarimeters.four_detector_polarimeter import FourDetecterPolarimeter
-from PyPola.FiberNetworkComponents.OpticalInstruments.polarization_beam_splitter import PolarizationBeamSplitter
-from PyPola.FiberNetworkComponents.optical_fiber import OpticalFiber
-from PyPola.utilities.polarization_utilities import random_polarized_stokes_vector
-from PyPola.utilities.stokes_vector import StokesVector
-from random import uniform
-from numpy import pi, array, sqrt
+from numpy import sqrt
 
-horizontal_sv = StokesVector(s0=1, s1=1, s2=0, s3=0)
-vertical_sv = StokesVector(s0=1, s1=-1, s2=0, s3=0)
-diagonal_sv = StokesVector(s0=1, s1=0, s2=1, s3=0)
-antidiagonal_sv = StokesVector(s0=1, s1=0, s2=-1, s3=0)
-pbs = PolarizationBeamSplitter(transmission_double_theta=0)
+max_qber_array = [
+    0, 0.00016518, 0.00048672, 0.00053978, 0.0006184, 0.00063279, 0.0011965, 0.00181018, 0.00188811, 0.00217725,
+    0.00264265, 0.0032424, 0.00381561, 0.0052125, 0.00522186, 0.00586134, 0.00607476, 0.00703943, 0.00776784,
+    0.00815067, 0.00837354, 0.00854442, 0.00861456, 0.00865159, 0.00897255, 0.00948793, 0.00958147, 0.00960358,
+    0.00976111, 0.01061279, 0.01239391, 0.01279746, 0.01294551, 0.0150345, 0.01535698, 0.01548859, 0.015582, 0.01573584,
+    0.01619115, 0.01630061, 0.01724691, 0.02000992, 0.02046908, 0.02056189, 0.02141287, 0.02152435, 0.02206766,
+    0.02300559, 0.0235417, 0.02398929, 0.02404643, 0.02500802, 0.02671483, 0.02838961, 0.02855327, 0.02928742,
+    0.03127343, 0.03197062, 0.0320171, 0.03306248, 0.03315154, 0.03323826, 0.03515286, 0.03560302, 0.03646078,
+    0.03659292, 0.03736212, 0.03855908, 0.03866104, 0.03954334, 0.0410308, 0.04142048, 0.04268305, 0.04279416,
+    0.04376239, 0.04580254, 0.04612156, 0.04657317, 0.04683914, 0.04821821, 0.04860836, 0.04867779, 0.04882736,
+    0.04891819, 0.04984346, 0.05027969, 0.05167905, 0.05178913, 0.05216354, 0.05247698, 0.05256642, 0.05273764,
+    0.05285226, 0.05482363, 0.05505043, 0.05572158, 0.05573196, 0.05701142, 0.05920693, 0.05922902, 0.05945037,
+    0.05993373, 0.06032255, 0.06251527, 0.06289143, 0.06310107, 0.06341098, 0.06364451, 0.06395832, 0.06488673,
+    0.0652601, 0.0654114, 0.06581609, 0.067064, 0.07011158, 0.07020326, 0.07139028, 0.07139307, 0.07260416, 0.07298931,
+    0.07300562, 0.0733263, 0.07333331, 0.07378955, 0.07448609, 0.07466527, 0.07486216, 0.07580279, 0.07683279,
+    0.07715661, 0.07834958, 0.08057089, 0.08204528, 0.08211706, 0.08257177, 0.08426193, 0.08490736, 0.08659327,
+    0.0874577, 0.08897872, 0.08971359, 0.09121477, 0.09246525, 0.09326029, 0.09480932, 0.09535493, 0.09576383,
+    0.09609823, 0.09644965, 0.09682302, 0.09729342, 0.09874226, 0.09951826, 0.10072041, 0.10077877, 0.10315989,
+    0.10386316, 0.10411826, 0.10538264, 0.10675256, 0.10728293, 0.10763407, 0.10771523, 0.1096118, 0.11079589,
+    0.11141102, 0.11225241, 0.1123172, 0.11370141, 0.11397646, 0.11665095, 0.11788208, 0.11897582, 0.11964795,
+    0.12007345, 0.12162248, 0.12196022, 0.12293927, 0.12294647, 0.12450234, 0.12837065, 0.12979678, 0.13128833,
+    0.13159628, 0.13233767, 0.13350593, 0.13412011, 0.13716394, 0.13716394
+]
 
-transmitted_horizontal, reflected_horizontal = [sv.s0 for sv in pbs.pass_stokes_vector(horizontal_sv)]
-transmitted_vertical, reflected_vertical = [sv.s0 for sv in pbs.pass_stokes_vector(vertical_sv)]
-transmitted_diagonal, reflected_diagonal = [sv.s0 for sv in pbs.pass_stokes_vector(diagonal_sv)]
-transmitted_antidiagonal, reflected_antidiagonal = [sv.s0 for sv in pbs.pass_stokes_vector(antidiagonal_sv)]
-print("Transmission angle: 0°")
-print("  Horizontal:", round(transmitted_horizontal, 2), round(reflected_horizontal, 2))
-print("    Vertical:", round(transmitted_vertical, 2), round(reflected_vertical, 2))
-print("    Diagonal:", round(transmitted_diagonal, 2), round(reflected_diagonal, 2))
-print("Antidiagonal:", round(transmitted_antidiagonal, 2), round(reflected_antidiagonal, 2), "\n")
-
-pbs.rotate(new_transmission_double_theta=pi / 2)
-transmitted_horizontal, reflected_horizontal = [sv.s0 for sv in pbs.pass_stokes_vector(horizontal_sv)]
-transmitted_vertical, reflected_vertical = [sv.s0 for sv in pbs.pass_stokes_vector(vertical_sv)]
-transmitted_diagonal, reflected_diagonal = [sv.s0 for sv in pbs.pass_stokes_vector(diagonal_sv)]
-transmitted_antidiagonal, reflected_antidiagonal = [sv.s0 for sv in pbs.pass_stokes_vector(antidiagonal_sv)]
-print("Transmission angle: 45°")
-print("  Horizontal:", round(transmitted_horizontal, 2), round(reflected_horizontal, 2))
-print("    Vertical:", round(transmitted_vertical, 2), round(reflected_vertical, 2))
-print("    Diagonal:", round(transmitted_diagonal, 2), round(reflected_diagonal, 2))
-print("Antidiagonal:", round(transmitted_antidiagonal, 2), round(reflected_antidiagonal, 2), "\n")
-
-pbs.rotate(new_transmission_double_theta=pi)
-transmitted_horizontal, reflected_horizontal = [sv.s0 for sv in pbs.pass_stokes_vector(horizontal_sv)]
-transmitted_vertical, reflected_vertical = [sv.s0 for sv in pbs.pass_stokes_vector(vertical_sv)]
-transmitted_diagonal, reflected_diagonal = [sv.s0 for sv in pbs.pass_stokes_vector(diagonal_sv)]
-transmitted_antidiagonal, reflected_antidiagonal = [sv.s0 for sv in pbs.pass_stokes_vector(antidiagonal_sv)]
-print("Transmission angle: 90°")
-print("  Horizontal:", round(transmitted_horizontal, 2), round(reflected_horizontal, 2))
-print("    Vertical:", round(transmitted_vertical, 2), round(reflected_vertical, 2))
-print("    Diagonal:", round(transmitted_diagonal, 2), round(reflected_diagonal, 2))
-print("Antidiagonal:", round(transmitted_antidiagonal, 2), round(reflected_antidiagonal, 2), "\n")
-
-pbs.rotate(new_transmission_double_theta=3 * pi / 2)
-transmitted_horizontal, reflected_horizontal = [sv.s0 for sv in pbs.pass_stokes_vector(horizontal_sv)]
-transmitted_vertical, reflected_vertical = [sv.s0 for sv in pbs.pass_stokes_vector(vertical_sv)]
-transmitted_diagonal, reflected_diagonal = [sv.s0 for sv in pbs.pass_stokes_vector(diagonal_sv)]
-transmitted_antidiagonal, reflected_antidiagonal = [sv.s0 for sv in pbs.pass_stokes_vector(antidiagonal_sv)]
-print("Transmission angle: 135°")
-print("  Horizontal:", round(transmitted_horizontal, 2), round(reflected_horizontal, 2))
-print("    Vertical:", round(transmitted_vertical, 2), round(reflected_vertical, 2))
-print("    Diagonal:", round(transmitted_diagonal, 2), round(reflected_diagonal, 2))
-print("Antidiagonal:", round(transmitted_antidiagonal, 2), round(reflected_antidiagonal, 2), "\n")
+print([
+    round(item, 8) for item in max_qber_array
+])
