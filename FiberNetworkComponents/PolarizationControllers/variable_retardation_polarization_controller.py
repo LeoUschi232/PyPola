@@ -58,9 +58,8 @@ class VariableRetardationPolarizationController(AbstractPolarizationController):
         if z2 == 0.0:
             cos_d3, sin_d3 = 1, 0
         else:
-            sign_d3 = -sgn(z2) * sgn(s3)
-            cos_d3 = sign_d3 * sqrt(1 - z2 * z2)
-            sin_d3 = sign_d3 * abs(z2)
+            cos_d3 = -sgn(z2) * sgn(s3) * sqrt(1 - z2 * z2)
+            sin_d3 = -sgn(s3) * z2
         fiber_squeezer_3 = array([
             [1, 0, 0, 0],
             [0, 1, 0, 0],
@@ -74,9 +73,8 @@ class VariableRetardationPolarizationController(AbstractPolarizationController):
         if z1 == 0.0:
             cos_d4, sin_d4 = sgn(s3) * sgn(z3), 0
         else:
-            sign_d4 = sgn(z1) * sgn(s3)
-            cos_d4 = sign_d4 * sgn(z1) * z3 / sqrt_z1z3
-            sin_d4 = sign_d4 * abs(z1) / sqrt_z1z3
+            cos_d4 = sgn(s3) * z3 / sqrt_z1z3
+            sin_d4 = sgn(s3) * z1 / sqrt_z1z3
         fiber_squeezer_4 = array([
             [1, 0, 0, 0],
             [0, cos_d4, 0, sin_d4],
