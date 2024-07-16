@@ -1,7 +1,7 @@
 # Custom added folders and files to be ignored
-Analysis/Expperiment/MeasurementData/*
-Analysis/Expperiment/PreprocessedData/*
-Analysis/Expperiment/Graphs/*
+Analysis/Experiment/MeasurementData/*
+Analysis/Experiment/PreprocessedData/*
+Analysis/Experiment/Graphs/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
