@@ -9,7 +9,7 @@ class WaveplateType(Enum):
     MODIFIABLE = 3
 
 
-class PolarizationWaveplate(AbstractOpticalInstrument):
+class RetardationWaveplate(AbstractOpticalInstrument):
     def __init__(
             self, waveplate_type: WaveplateType = WaveplateType.MODIFIABLE,
             double_theta: float = 0.0,

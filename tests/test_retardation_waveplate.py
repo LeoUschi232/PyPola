@@ -1,14 +1,14 @@
-from PyPola.FiberNetworkComponents.OpticalInstruments.polarization_waveplate import PolarizationWaveplate, WaveplateType
+from PyPola.FiberNetworkComponents.OpticalInstruments.retardation_waveplate import RetardationWaveplate, WaveplateType
 from PyPola.utilities.stokes_vector import StokesVector
 from numpy import pi
 import unittest
 
 
-class TestPolarizationWaveplate(unittest.TestCase):
+class TestRetardationWaveplate(unittest.TestCase):
     def test_quarterwaveplate_horizontal_input(self):
         """Linear horizontal polarized light passes through a quarter waveplate"""
         input_light = StokesVector(s0=1, s1=1, s2=0, s3=0)
-        quarterwaveplate = PolarizationWaveplate(waveplate_type=WaveplateType.QUARTER)
+        quarterwaveplate = RetardationWaveplate(waveplate_type=WaveplateType.QUARTER)
 
         quarterwaveplate.rotate(new_double_theta=0)
         output_light = quarterwaveplate.pass_stokes_vector(input_light)
@@ -33,7 +33,7 @@ class TestPolarizationWaveplate(unittest.TestCase):
     def test_quarterwaveplate_vertical_input(self):
         """Linear vertical polarized light passes through a quarter waveplate"""
         input_light = StokesVector(s0=1, s1=-1, s2=0, s3=0)
-        quarterwaveplate = PolarizationWaveplate(waveplate_type=WaveplateType.QUARTER)
+        quarterwaveplate = RetardationWaveplate(waveplate_type=WaveplateType.QUARTER)
 
         quarterwaveplate.rotate(new_double_theta=0)
         output_light = quarterwaveplate.pass_stokes_vector(input_light)
@@ -58,7 +58,7 @@ class TestPolarizationWaveplate(unittest.TestCase):
     def test_quarterwaveplate_plus45_input(self):
         """Linear +45° polarized light passes through a quarter waveplate"""
         input_light = StokesVector(s0=1, s1=0, s2=1, s3=0)
-        quarterwaveplate = PolarizationWaveplate(waveplate_type=WaveplateType.QUARTER)
+        quarterwaveplate = RetardationWaveplate(waveplate_type=WaveplateType.QUARTER)
 
         quarterwaveplate.rotate(new_double_theta=0)
         output_light = quarterwaveplate.pass_stokes_vector(input_light)
@@ -83,7 +83,7 @@ class TestPolarizationWaveplate(unittest.TestCase):
     def test_quarterwaveplate_minus45_input(self):
         """Linear -45° polarized light passes through a quarter waveplate"""
         input_light = StokesVector(s0=1, s1=0, s2=-1, s3=0)
-        quarterwaveplate = PolarizationWaveplate(waveplate_type=WaveplateType.QUARTER)
+        quarterwaveplate = RetardationWaveplate(waveplate_type=WaveplateType.QUARTER)
 
         quarterwaveplate.rotate(new_double_theta=0)
         output_light = quarterwaveplate.pass_stokes_vector(input_light)
@@ -108,7 +108,7 @@ class TestPolarizationWaveplate(unittest.TestCase):
     def test_quarterwaveplate_right_circular_input(self):
         """Right circular polarized light passes through a quarter waveplate"""
         input_light = StokesVector(s0=1, s1=0, s2=0, s3=1)
-        quarterwaveplate = PolarizationWaveplate(waveplate_type=WaveplateType.QUARTER)
+        quarterwaveplate = RetardationWaveplate(waveplate_type=WaveplateType.QUARTER)
 
         quarterwaveplate.rotate(new_double_theta=0)
         output_light = quarterwaveplate.pass_stokes_vector(input_light)
@@ -137,7 +137,7 @@ class TestPolarizationWaveplate(unittest.TestCase):
     def test_quarterwaveplate_left_circular_input(self):
         """Left circular polarized light passes through a quarter waveplate"""
         input_light = StokesVector(s0=1, s1=0, s2=0, s3=-1)
-        quarterwaveplate = PolarizationWaveplate(waveplate_type=WaveplateType.QUARTER)
+        quarterwaveplate = RetardationWaveplate(waveplate_type=WaveplateType.QUARTER)
 
         quarterwaveplate.rotate(new_double_theta=0)
         output_light = quarterwaveplate.pass_stokes_vector(input_light)
@@ -166,7 +166,7 @@ class TestPolarizationWaveplate(unittest.TestCase):
     def test_halfwaveplate_horizontal_input(self):
         """Linear horizontal polarized light passes through a half waveplate"""
         input_light = StokesVector(s0=1, s1=1, s2=0, s3=0)
-        quarterwaveplate = PolarizationWaveplate(waveplate_type=WaveplateType.HALF)
+        quarterwaveplate = RetardationWaveplate(waveplate_type=WaveplateType.HALF)
 
         quarterwaveplate.rotate(new_double_theta=0)
         output_light = quarterwaveplate.pass_stokes_vector(input_light)
@@ -191,7 +191,7 @@ class TestPolarizationWaveplate(unittest.TestCase):
     def test_halfwaveplate_vertical_input(self):
         """Linear vertical polarized light passes through a half waveplate"""
         input_light = StokesVector(s0=1, s1=-1, s2=0, s3=0)
-        quarterwaveplate = PolarizationWaveplate(waveplate_type=WaveplateType.HALF)
+        quarterwaveplate = RetardationWaveplate(waveplate_type=WaveplateType.HALF)
 
         quarterwaveplate.rotate(new_double_theta=0)
         output_light = quarterwaveplate.pass_stokes_vector(input_light)
@@ -216,7 +216,7 @@ class TestPolarizationWaveplate(unittest.TestCase):
     def test_halfwaveplate_plus45_input(self):
         """Linear +45° polarized light passes through a half waveplate"""
         input_light = StokesVector(s0=1, s1=0, s2=1, s3=0)
-        quarterwaveplate = PolarizationWaveplate(waveplate_type=WaveplateType.HALF)
+        quarterwaveplate = RetardationWaveplate(waveplate_type=WaveplateType.HALF)
 
         quarterwaveplate.rotate(new_double_theta=0)
         output_light = quarterwaveplate.pass_stokes_vector(input_light)
@@ -241,7 +241,7 @@ class TestPolarizationWaveplate(unittest.TestCase):
     def test_halfwaveplate_minus45_input(self):
         """Linear -45° polarized light passes through a half waveplate"""
         input_light = StokesVector(s0=1, s1=0, s2=-1, s3=0)
-        quarterwaveplate = PolarizationWaveplate(waveplate_type=WaveplateType.HALF)
+        quarterwaveplate = RetardationWaveplate(waveplate_type=WaveplateType.HALF)
 
         quarterwaveplate.rotate(new_double_theta=0)
         output_light = quarterwaveplate.pass_stokes_vector(input_light)
@@ -266,7 +266,7 @@ class TestPolarizationWaveplate(unittest.TestCase):
     def test_halfwaveplate_right_circular_input(self):
         """Right circular polarized light passes through a quarter waveplate"""
         input_light = StokesVector(s0=1, s1=0, s2=0, s3=1)
-        quarterwaveplate = PolarizationWaveplate(waveplate_type=WaveplateType.HALF)
+        quarterwaveplate = RetardationWaveplate(waveplate_type=WaveplateType.HALF)
 
         quarterwaveplate.rotate(new_double_theta=0)
         output_light = quarterwaveplate.pass_stokes_vector(input_light)
@@ -294,7 +294,7 @@ class TestPolarizationWaveplate(unittest.TestCase):
     def test_halfwaveplate_left_circular_input(self):
         """Left circular polarized light passes through a quarter waveplate"""
         input_light = StokesVector(s0=1, s1=0, s2=0, s3=-1)
-        quarterwaveplate = PolarizationWaveplate(waveplate_type=WaveplateType.HALF)
+        quarterwaveplate = RetardationWaveplate(waveplate_type=WaveplateType.HALF)
 
         quarterwaveplate.rotate(new_double_theta=0)
         output_light = quarterwaveplate.pass_stokes_vector(input_light)

@@ -1,5 +1,5 @@
 from PyPola.FiberNetworkComponents.Polarimeters.abstract_polarimeter import AbstractPolarimeter
-from PyPola.FiberNetworkComponents.OpticalInstruments.polarization_waveplate import PolarizationWaveplate, WaveplateType
+from PyPola.FiberNetworkComponents.OpticalInstruments.retardation_waveplate import RetardationWaveplate, WaveplateType
 from PyPola.FiberNetworkComponents.OpticalInstruments.linear_polarizer import LinearPolarizer
 from PyPola.utilities.stokes_vector import StokesVector
 from PyPola.utilities.general_utilities import progress_bar
@@ -12,7 +12,7 @@ class QuarterwavelatePolarimeter(AbstractPolarimeter):
         super().__init__()
         self.number_of_rotations = max([4, number_of_rotations])
         self.betas = linspace(start=0, stop=pi, num=self.number_of_rotations)
-        self.quarterwaveplate = PolarizationWaveplate(waveplate_type=WaveplateType.QUARTER, double_theta=0)
+        self.quarterwaveplate = RetardationWaveplate(waveplate_type=WaveplateType.QUARTER, double_theta=0)
         self.polarizer = LinearPolarizer(double_theta=0.5 * pi)
 
     def set_number_of_roations(self, number_of_rotations: int):
